@@ -5,9 +5,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.lang.annotation.*;
 
-public class CompoundValidation {
+public class CompositeValidation {
     public static void main(String[] args) {
-        System.out.println(CompoundValidation.class.getSimpleName());
+        System.out.println(CompositeValidation.class.getSimpleName());
 
         Time t = new Time(15, 30);
         Validation.buildDefaultValidatorFactory().getValidator().validate(t).forEach(vio -> {
