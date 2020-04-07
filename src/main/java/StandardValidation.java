@@ -6,13 +6,13 @@ public class StandardValidation {
     public static void main(String[] args) {
         System.out.println(StandardValidation.class.getSimpleName());
 
-        Time t = new Time(15, 30);
-        Validation.buildDefaultValidatorFactory().getValidator().validate(t).forEach(vio -> {
+        Time t1 = new Time(15, 30);
+        Validation.buildDefaultValidatorFactory().getValidator().validate(t1).forEach(vio -> {
             System.out.println(vio.getMessage());
         });
 
-        Time ta2 = new Time(26, 30);
-        Validation.buildDefaultValidatorFactory().getValidator().validate(ta2).forEach(vio -> {
+        Time t2 = new Time(26, -1);
+        Validation.buildDefaultValidatorFactory().getValidator().validate(t2).forEach(vio -> {
             System.out.println(vio.getPropertyPath());
             System.out.println(vio.getMessage());
         });

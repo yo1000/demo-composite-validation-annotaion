@@ -1,5 +1,6 @@
 import javax.validation.Constraint;
 import javax.validation.Payload;
+import javax.validation.ReportAsSingleViolation;
 import javax.validation.Validation;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -9,13 +10,13 @@ public class CompositeValidation {
     public static void main(String[] args) {
         System.out.println(CompositeValidation.class.getSimpleName());
 
-        Time t = new Time(15, 30);
-        Validation.buildDefaultValidatorFactory().getValidator().validate(t).forEach(vio -> {
+        Time t1 = new Time(15, 30);
+        Validation.buildDefaultValidatorFactory().getValidator().validate(t1).forEach(vio -> {
             System.out.println(vio.getMessage());
         });
 
-        Time tb2 = new Time(26, 30);
-        Validation.buildDefaultValidatorFactory().getValidator().validate(tb2).forEach(vio -> {
+        Time t2 = new Time(26, -1);
+        Validation.buildDefaultValidatorFactory().getValidator().validate(t2).forEach(vio -> {
             System.out.println(vio.getPropertyPath());
             System.out.println(vio.getMessage());
         });
@@ -25,6 +26,7 @@ public class CompositeValidation {
     @Target(ElementType.FIELD)
     @Documented
     @Constraint(validatedBy = {})
+    @ReportAsSingleViolation
     @Min(0)
     @Max(23)
     @interface Hour {
@@ -37,8 +39,9 @@ public class CompositeValidation {
     @Target(ElementType.FIELD)
     @Documented
     @Constraint(validatedBy = {})
-    @Min(0)
-    @Max(59)
+    @ReportAsSingleViolation
+    @Min(value = 0, message = "{value}以上にしてください!!")
+    @Max(value = 59, message = "{value}以下にしてください!!")
     @interface Minute {
         String message() default "";
         Class<?>[] groups() default {};
@@ -51,10 +54,10 @@ public class CompositeValidation {
             this.minute = minute;
         }
 
-        @Hour
+        @Hour(message = "不正な時間の入力です")
         private int hour;
 
-        @Minute
+        @Minute(message = "不正な分の入力です")
         private int minute;
     }
 }
